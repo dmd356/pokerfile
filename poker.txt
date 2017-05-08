@@ -1,0 +1,178 @@
+import java.util.Arrays;
+
+
+public class Poker
+{
+  public static void main(String[] args)
+  {
+    
+    String[] black = {"2H", "2S", "2D", "3D", "8D"};
+    String[] white = {"4C", "3C", "5C", "6C", "7C"};
+
+  	PokerDeck pd = new PokerDeck();
+    pd.createDeck();
+   	int[] intBlack = pd.sortHand(black);
+    int[] intWhite = pd.sortHand(white);
+    pd.checkPairs(intBlack);
+    pd.checkPairs(intWhite);
+
+  }
+}
+
+// you can add other public classes to this editor in any order
+public class PokerDeck
+{
+private String[] deckOfCards = new String[52];
+private int k = 0;
+private boolean whiteSFlush;
+private boolean blackSFlush;
+
+
+public void createDeck()
+{
+	String[] cdsh = {"C", "D", "S", "H"};
+	for(int i=0; i<4; i++)
+    {
+		String suit = cdsh[i];      
+		for(int j=2; j<15; j++) // j is card in array
+        {
+
+   		  if(j < 10)
+          {
+   		     deckOfCards[k] = Integer.toString(j)+suit;
+   		  }
+			switch(j)
+            {
+        		case 10: 
+          		deckOfCards[k] = "T" + suit;
+              	break;
+        		case 11:
+          		deckOfCards[k] = "J" + suit;
+              	break;
+        		case 12:
+          		deckOfCards[k] = "Q" + suit;
+              	break;
+        		case 13:
+          		deckOfCards[k] = "K" + suit;
+              	break;
+              	case 14:
+          		deckOfCards[k] = "A" + suit;
+              	break;
+            }//switch
+          k++;
+      	}//2nd for j
+	}//1st for i
+}//createDeck
+
+public void checkDeck()
+{
+	for(int i = 0; i < deckOfCards.length; i++)
+    {
+    	System.out.println(deckOfCards[i]);
+    }
+}//checkDeck
+
+  
+public void checkPairs(int[] playerHand)
+{
+  int count = 0;
+  for(int i=0; i < 5; i++)
+  {
+    for(int j=0; j<5; j++)
+    {
+
+		if(playerHand[i]==playerHand[j]+1)
+        {
+        	count++;
+        }
+    }
+  }
+  if(count==4)
+  {
+   System.out.println("Thats a flush!"); 
+   System.out.println(count);
+  }
+  else
+  {
+   System.out.println("Thats not a flush");
+    System.out.println(count);
+  }  
+}
+  
+  
+public boolean canParse(String parse)
+{
+    boolean canParse = true;
+    try
+    {
+        Integer.parseInt(parse);
+    }
+  	catch(NumberFormatException e)
+    {
+        canParse = false;
+    }
+    return canParse;
+}
+  
+  
+public int[] sortHand(String[] playerHand)
+{
+	int[] newHand = new int[5];
+	
+  for(int i=0; i<5; i++)
+  {
+    String x = playerHand[i].substring(0, 1);
+    
+    if(canParse(x)==true)
+    {
+      newHand[i] = Integer.parseInt(x);
+    }
+    else
+    {
+    switch(x)
+    {
+      case "T":
+      	newHand[i] = 10;
+      	break;
+      case "J":
+		newHand[i] = 11;
+      	break;
+      case "Q":
+		newHand[i] = 12;
+      	break;
+      case "K":
+		newHand[i] = 13;
+      	break;
+      case "A":
+		newHand[i] = 14;
+      	break;
+    }
+    }
+    String y = playerHand[i].substring(1);
+    switch(y)
+    {
+      case "C":
+      	newHand[i] += 100;
+      	break;
+      case "D":
+		newHand[i] += 200;
+      	break;
+      case "S":
+		newHand[i] += 300;
+      	break;
+      case "H":
+		newHand[i] += 400;
+      	break;
+    }  
+  }//end for i
+  Arrays.sort(newHand);
+  for(int j =0; j<5; j++)
+  {
+   System.out.println(newHand[j]);
+  }
+  
+  
+	return newHand;
+}
+  
+}//PokerDeck
